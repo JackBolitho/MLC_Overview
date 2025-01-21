@@ -17,4 +17,5 @@ This is a link to wonderful lectures by CMU professor Tianqi Chen on the topic:
 This is a link to notes on said lectures:
 [https://mlc.ai/chapter_introduction/index.html]
 
-
+This is a link to a MLC LLM (Machine Learning Compilation for Large Language Models) tutorial: 
+[https://llm.mlc.ai/docs/get_started/introduction.html#introduction-to-mlc-llm]
