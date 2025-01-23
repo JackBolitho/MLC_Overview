@@ -19,3 +19,8 @@ This is a link to notes on said lectures:
 
 This is a link to a MLC LLM (Machine Learning Compilation for Large Language Models) tutorial: 
 [https://llm.mlc.ai/docs/get_started/introduction.html#introduction-to-mlc-llm]
+
+This is a link to a paper which uses MLC LLM in the context of generative music transformers: [https://arxiv.org/pdf/2411.09625]
+
+This is a link to the GitHub of the MLC LLM Framework: [https://github.com/mlc-ai/mlc-llm]
+
