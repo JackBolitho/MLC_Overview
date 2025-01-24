@@ -24,3 +24,4 @@ This is a link to a paper which uses MLC LLM in the context of generative music 
 
 This is a link to the GitHub of the MLC LLM Framework: [https://github.com/mlc-ai/mlc-llm]
 
+This is a link to the implementation of the GPT-2 architecture with the MLC LLM framework: [https://github.com/mlc-ai/mlc-llm/blob/main/python/mlc_llm/model/gpt2/gpt2_model.py]
