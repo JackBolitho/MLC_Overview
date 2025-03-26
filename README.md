@@ -29,6 +29,8 @@ This is a link to the implementation of the GPT-2 architecture with the MLC LLM 
 This is a link to a directed graph representing the tvm class hierarchy: [https://tvm.apache.org/docs/reference/api/doxygen/inherits.html]
 
 
+
+
 # How To Inference With MLC-LLM
 MLC-LLM is a framework designed to make ML Chatbots more accessible. All parts of the framework are geared towards chatbots, which is great if you want to make a chatbot. The process for inferencing any MLC-LLM model starts downloading MLC-LLM from here: [https://llm.mlc.ai/docs/install/mlc_llm.html]. 
 
@@ -36,20 +38,20 @@ Once you download the MLC-LLM package, in order to create a model, we must first
 
 After that, compile the model functions into a .dylib, which can be found here: [https://llm.mlc.ai/docs/compilation/compile_models.html]
 
-### Converting Weights and the Chatbot in Python
+### Converting Weights and the Chatbot in Python:
 In order to use the python chatbot:
 
-#### Convert the weights to an MLC acceptable format:
+Convert the weights to an MLC acceptable format:
 ```bash
 mlc_llm convert_weight ./JordanAI-bassAndChords-v0.1-pytorch --quantization q0f16 -o ./JordanAI-bassAndChords-v0.1-MLCLLM
 ```
 
-#### Generate the MLC config:
+Generate the MLC config:
 ```bash
 mlc_llm gen_config ./JordanAI-bassAndChords-v0.1-pytorch --quantization q0f16 --conv-template LM -o ./JordanAI-bassAndChords-v0.1-MLCLLM
 ```
 
-#### Compile into a .dylib binary given the weights and config:
+Compile into a .dylib binary given the weights and config:
 ```bash
 mlc_llm compile ./JordanAI-bassAndChords-v0.1-MLCLLM/mlc-chat-config.json --device metal:0 -o ./JordanAI-bassAndChords-v0.1-MLCLLM/MLCModel.dylib
 ```
@@ -74,6 +76,15 @@ response = engine.chat.completions.create(
 )
 print(response)
 ```
-The major problems with this current implementation are that they require a tokenizer.json and that the output is a token, not a logit. 
 
+This implementation follows by OpenAI protocol. The major problems with this current implementation are that they require a tokenizer.json and that the output is a token, not a logit. Notably, MLC-LLM does not provide any functionality to get the logits. For a generative music model, this is ideally what we would want (example uses PyTorch):
 
+```python
+from transformers import GPT2LMHeadModel
+import torch
+
+model = GPT2LMHeadModel.from_pretrained("bassAndChords-v0.1") # directory that contains .json and .safetensors
+
+tokens = torch.tensor([55027, 0, 10200, 11237], dtype=torch.float32)
+logits = model(tokens).logits
+```
