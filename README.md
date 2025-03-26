@@ -31,14 +31,14 @@ This is a link to a directed graph representing the tvm class hierarchy: [https:
 
 
 
-# How To Inference With MLC-LLM
+# How To Inference With MLC-LLM in Python
 MLC-LLM is a framework designed to make ML Chatbots more accessible. All parts of the framework are geared towards chatbots, which is great if you want to make a chatbot. The process for inferencing any MLC-LLM model starts downloading MLC-LLM from here: [https://llm.mlc.ai/docs/install/mlc_llm.html]. 
 
 Once you download the MLC-LLM package, in order to create a model, we must first start by converting model weights (Pytorch, ONNX, etc.) to the MLC-LLM format. This is described here: [https://llm.mlc.ai/docs/compilation/convert_weights.html]
 
 After that, compile the model functions into a .dylib, which can be found here: [https://llm.mlc.ai/docs/compilation/compile_models.html]
 
-### Converting Weights and the Chatbot in Python:
+### Converting Weights:
 In order to use the python chatbot:
 
 Convert the weights to an MLC acceptable format:
@@ -62,6 +62,8 @@ Then, we can create the MLC Engine with our given model directory and .dylib mod
 
 The tokenizer we used as a test was found from https://huggingface.co/mlc-ai/mlc-chat-stanford-crfm-music-small-800k-q0f16/blob/main/tokenizer.json, which paired every possible vocabulary element with an adjacent token. This works because the model has the same vocabulary as ours. 
 
+
+### Calling Model in Python:
 ```python
 from mlc_llm import MLCEngine
 engine = MLCEngine(model="./JordanAI-bassAndChords-v0.1-MLCLLM", model_lib="./JordanAI-bassAndChords-v0.1-MLCLLM/MLCModel.dylib")
@@ -88,3 +90,9 @@ model = GPT2LMHeadModel.from_pretrained("bassAndChords-v0.1") # directory that c
 tokens = torch.tensor([55027, 0, 10200, 11237], dtype=torch.float32)
 logits = model(tokens).logits
 ```
+
+
+
+
+# How To Inference With MLC-LLM in C++
+This is where things get interesting. The interface provided for MLC-LLM 
