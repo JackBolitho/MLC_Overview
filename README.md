@@ -27,3 +27,56 @@ This is a link to the GitHub of the MLC LLM Framework: [https://github.com/mlc-a
 This is a link to the implementation of the GPT-2 architecture with the MLC LLM framework: [https://github.com/mlc-ai/mlc-llm/blob/main/python/mlc_llm/model/gpt2/gpt2_model.py]
 
 This is a link to a directed graph representing the tvm class hierarchy: [https://tvm.apache.org/docs/reference/api/doxygen/inherits.html]
+
+
+# How To Inference With MLC-LLM
+MLC-LLM is a framework designed to make ML Chatbots more accessible. All parts of the framework are geared towards chatbots, which is great if you want to make a chatbot. The process for inferencing any MLC-LLM model starts with converting model weights (Pytorch, ONNX, etc.) to the MLC-LLM format and compiling the primitive tensor functions into a .dylib.  
+
+### Converting Weights
+In order to convert a GPT2LMHeadModel to MLC LLM:
+
+Convert the weights to an MLC acceptable format:
+```bash
+mlc_llm convert_weight ./JordanAI-bassAndChords-v0.1-pytorch --quantization q0f16 -o ./JordanAI-bassAndChords-v0.1-MLCLLM
+```
+
+
+Generate the MLC config:
+
+mlc_llm gen_config ./JordanAI-bassAndChords-v0.1-pytorch --quantization q0f16 --conv-template LM -o ./JordanAI-bassAndChords-v0.1-MLCLLM
+
+
+
+Compile into a .dylib binary given the weights and config:
+
+mlc_llm compile ./JordanAI-bassAndChords-v0.1-MLCLLM/mlc-chat-config.json --device metal:0 -o ./JordanAI-bassAndChords-v0.1-MLCLLM/MLCModel.dylib
+
+
+
+These commands and their syntax are listed here: https://llm.mlc.ai/docs/compilation/compile_models.html#compile-command-specification 
+
+Then, we can create the MLC Engine with our given model directory and .dylib model binary. For the MLCEngine to work, the model directory must include a tokenizer.json, which determines how data is split up into tokens. We do not need to tokenize, since all of our MIDI inputs are already tokens.
+
+The tokenizer we used as a test was found from https://huggingface.co/mlc-ai/mlc-chat-stanford-crfm-music-small-800k-q0f16/blob/main/tokenizer.json, which paired every possible vocabulary element with an adjacent token. This works because the model has the same vocabulary as ours. We want to reimplement the MLCEngine such that we do not need this tokenizer.
+
+from mlc_llm import MLCEngine
+
+engine = MLCEngine(model="./JordanAI-bassAndChords-v0.1-MLCLLM", model_lib="./JordanAI-bassAndChords-v0.1-MLCLLM/MLCModel.dylib")
+
+
+
+Once we have the engine, we can enact the chat completion to get the next predicted token. Content refers to the token that we input, and max tokens is the maximum number of tokens we generate from the response.
+
+response = engine.chat.completions.create(
+    messages=[{"role": "user", "content": "EVENT_TIME_0"}] ,
+    max_tokens=1
+)
+print(response)
+
+
+
+The major problems with this current implementation are that they require a tokenizer.json and that the output is a token, not a logit. 
+
+### Python Chatbot
+
+
