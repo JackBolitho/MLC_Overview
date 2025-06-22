@@ -3,7 +3,7 @@
 In order to clone the right version of MLC-LLM, run:
 ` ./clone_mlc_repo.sh `
 
-Then, to ccompile the threaded engine, run:
+Then, to compile the threaded engine, run:
 ` ./compile_threaded_engine.sh `
 
 Call the threaded engine from the parent directory of the build directory like so:
