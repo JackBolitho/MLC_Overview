@@ -1,4 +1,4 @@
-# How To Run Threaded_Engine_CC
+# How To Run threaded_engine_interface.cc
 
 In order to clone the right version of MLC-LLM, run:
 ` ./clone_mlc_repo.sh `
