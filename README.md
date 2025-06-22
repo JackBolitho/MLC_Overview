@@ -90,11 +90,3 @@ model = GPT2LMHeadModel.from_pretrained("bassAndChords-v0.1") # directory that c
 tokens = torch.tensor([55027, 0, 10200, 11237], dtype=torch.float32)
 logits = model(tokens).logits
 ```
-
-
-
-
-# How To Inference With MLC-LLM in C++
-This is where things get interesting. In order to understand how to interface with the model in C++, we need to first understand the architecture of the MLC-LLM chatbot.
-
-### MLC-LLM Architecture:
